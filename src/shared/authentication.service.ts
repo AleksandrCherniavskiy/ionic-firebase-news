@@ -1,15 +1,13 @@
 import { Injectable, NgZone } from '@angular/core';
+import { User } from './user';
 import { Router } from '@angular/router';
-
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { auth } from 'firebase/app';
-
-import { User } from './user';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthenticationService {
   userData: any;
 
@@ -49,17 +47,7 @@ export class AuthenticationService {
       });
   }
 
-  // Recover password
-  passwordRecover(passwordResetEmail) {
-    return this.ngFireAuth.auth.sendPasswordResetEmail(passwordResetEmail)
-      .then(() => {
-        window.alert('Password reset email has been sent, please check your inbox');
-      }).catch((error) => {
-        window.alert(error);
-      });
-  }
-
-  // Returns true when user is logged in
+  // Returns true when user is looged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
     return (user !== null && user.emailVerified !== false) ? true : false;
@@ -71,27 +59,14 @@ export class AuthenticationService {
     return (user.emailVerified !== false) ? true : false;
   }
 
-  // Auth providers
-  authLogin(provider) {
-    return this.ngFireAuth.auth.signInWithPopup(provider)
-      .then((result) => {
-        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
-        });
-        this.setUserData(result.user);
-      }).catch((error) => {
-        window.alert(error);
-    });
-  }
-
-  // Store user is localStorage
+  // Store user in localStorage
   setUserData(user) {
     const userRef: AngularFirestoreDocument<any> = this.afStore.doc(`users/${user.uid}`);
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoUrl: user.photoURL,
+      photoURL: user.photoURL,
       emailVerified: user.emailVerified
     };
     return userRef.set(userData, {
@@ -106,4 +81,5 @@ export class AuthenticationService {
       this.router.navigate(['login']);
     });
   }
+
 }
