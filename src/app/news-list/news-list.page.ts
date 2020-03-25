@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from '../../shared/authentication.service';
 import { NewsService } from '../../shared/news.service';
 import { NewsItem } from '../../shared/news-item.model';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-news-list',
@@ -11,7 +12,8 @@ import { NewsItem } from '../../shared/news-item.model';
 })
 export class NewsListPage implements OnInit {
 
-  news: NewsItem[];
+  private news: NewsItem[];
+  private subscription: Subscription;
 
   constructor(
     private newsService: NewsService,
@@ -19,7 +21,7 @@ export class NewsListPage implements OnInit {
     ) { }
 
   ngOnInit() {
-    this.newsService.getNews().subscribe(data => {
+    this.subscription = this.newsService.getNews().subscribe(data => {
       this.news = data.map(e => {
         return {
           id: e.payload.doc.id,
@@ -27,6 +29,10 @@ export class NewsListPage implements OnInit {
         } as NewsItem;
       });
     });
+  }
+
+  ionViewWillLeave() {
+    this.subscription.unsubscribe();
   }
 
 }

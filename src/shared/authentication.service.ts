@@ -1,7 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Router } from '@angular/router';
+
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { auth } from 'firebase/app';
 
 import { User } from './user';
 
@@ -60,7 +62,7 @@ export class AuthenticationService {
   // Returns true when user is logged in
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? user.emailVerified : false;
+    return (user !== null && user.emailVerified !== false) ? true : false;
   }
 
   // Returns true when user's email is verified

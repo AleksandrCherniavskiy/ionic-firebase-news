@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons>
-      <ion-back-button></ion-back-button>
+      <ion-back-button *ngIf="authService.isLoggedIn"></ion-back-button>
     </ion-buttons>
     <ion-title>Sign in User</ion-title>
   </ion-toolbar>
@@ -16,7 +16,7 @@
 
     <ion-item>
       <ion-label position="floating">Password</ion-label>
-      <ion-input type="password" #password required></ion-input>
+      <ion-input type="password" (keyup.enter)="logIn(email, password)" #password required></ion-input>
     </ion-item>
 
     <ion-row>
