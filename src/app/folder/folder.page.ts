@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+
 import { AuthenticationService } from '../../shared/authentication.service';
+import { NewsService } from '../../shared/news.service';
 
 @Component({
   selector: 'app-folder',
@@ -12,7 +14,8 @@ export class FolderPage implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    public authService: AuthenticationService
+    public authService: AuthenticationService,
+    private newsService: NewsService
   ) { }
 
   ngOnInit() {

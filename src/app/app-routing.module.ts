@@ -10,8 +10,7 @@ const routes: Routes = [
   },
   {
     path: 'folder/:id',
-    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule),
-    canActivate: [AuthGuard]
+    loadChildren: () => import('./folder/folder.module').then( m => m.FolderPageModule)
   },
   {
     path: 'registration',
@@ -24,6 +23,11 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then( m => m.LoginPageModule)
+  },
+  {
+    path: 'news-list',
+    loadChildren: () => import('./news-list/news-list.module').then( m => m.NewsListPageModule),
+    canActivate: [AuthGuard]
   }
 ];
 

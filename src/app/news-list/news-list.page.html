@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>News</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="authService.signOut()"><ion-icon name="exit-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let new of news" [href]="new.link">
+    <ion-img [src]="new.src"></ion-img>
+
+    <ion-card-header>
+      <ion-card-title>{{new.title}}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>{{new.summary}}</ion-card-content>
+  </ion-card>
+</ion-content>
