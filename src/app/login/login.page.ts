@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../shared/authentication.service';
 
@@ -10,17 +10,25 @@ import { AuthenticationService } from '../../shared/authentication.service';
 
 export class LoginPage implements OnInit {
 
+  emailIsVerified: boolean;
+
+
   constructor(
     public authService: AuthenticationService,
     public router: Router
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authService.authEvent$.subscribe(authEvent => {
+      this.emailIsVerified = authEvent;
+      console.log('authEvent', this.emailIsVerified);
+    });
+  }
 
   logIn(email, password) {
     this.authService.signIn(email.value, password.value)
       .then((res) => {
-        if (this.authService.isEmailVerified) {
+        if (this.emailIsVerified) {
           this.router.navigate(['news-list']);
         } else {
           window.alert('Email is not verified');
@@ -30,5 +38,6 @@ export class LoginPage implements OnInit {
       window.alert(error.message);
     });
   }
+
 
 }

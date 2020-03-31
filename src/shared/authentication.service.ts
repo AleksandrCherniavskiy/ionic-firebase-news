@@ -1,28 +1,40 @@
-import { Injectable, NgZone } from '@angular/core';
-import { User } from './user';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+
+import { User } from './user';
+import {BehaviorSubject, Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class AuthenticationService {
+
   userData: any;
+  formPasswordReset: FormGroup = this.formBuilder.group({
+    email: [null, [Validators.required, Validators.email]]
+  });
+  private authEvent: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  public authEvent$: Observable<boolean> = this.authEvent.asObservable();
 
   constructor(
     public afStore: AngularFirestore,
     public ngFireAuth: AngularFireAuth,
     public router: Router,
-    public ngZone: NgZone
+    private formBuilder: FormBuilder
   ) {
     this.ngFireAuth.authState.subscribe(user => {
       if (user) {
+        this.authEvent.next(user.emailVerified);
         this.userData = user;
+        console.log('user.emailVerified', user.emailVerified);
         localStorage.setItem('user', JSON.stringify(this.userData));
         JSON.parse(localStorage.getItem('user'));
       } else {
+        this.authEvent.next(false);
         localStorage.setItem('user', null);
         JSON.parse(localStorage.getItem('user'));
       }
@@ -79,7 +91,20 @@ export class AuthenticationService {
     return this.ngFireAuth.auth.signOut().then(() => {
       localStorage.removeItem('user');
       this.router.navigate(['login']);
+      // this.authEvent.next(false);
     });
   }
 
+  passwordReset(): void {
+    const email = this.formPasswordReset.controls['email'].value;
+
+    this.ngFireAuth.auth.sendPasswordResetEmail(email).then(
+      () => {
+        // success, show some message
+      },
+      err => {
+        // handle errors
+      }
+    );
+  }
 }

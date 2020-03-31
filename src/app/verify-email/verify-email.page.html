@@ -14,9 +14,15 @@
       <p>
         Please check your email and click on the link to verify your email address.
       </p>
+
       <ion-button type="submit" (click)="authService.sendVerificationMail()" expand="block">
         Resend Verification Email
       </ion-button>
+
+      <ion-button type="submit" (click)="authService.router.navigate(['login'])" expand="block">
+        Login Page
+      </ion-button>
+
     </ion-row>
   </ion-grid>
 </ion-content>

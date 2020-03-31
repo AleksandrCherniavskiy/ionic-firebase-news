@@ -28,6 +28,10 @@ const routes: Routes = [
     path: 'news-list',
     loadChildren: () => import('./news-list/news-list.module').then( m => m.NewsListPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'password-reset',
+    loadChildren: () => import('./pages/password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
   }
 ];
 
